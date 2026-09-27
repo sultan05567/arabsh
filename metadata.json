@@ -1,0 +1,8 @@
+{
+  "name": "متجر عرب | Arab Store",
+  "description": "منصة تسوق إلكتروني ديناميكية متكاملة تدعم اللغة العربية مع إدارة المنتجات والتصنيفات والطلبات والمستخدمين",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

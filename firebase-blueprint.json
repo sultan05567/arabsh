@@ -1,0 +1,158 @@
+{
+  "entities": {
+    "StoreSettings": {
+      "title": "StoreSettings",
+      "description": "Store branding, theme engine colors, and contact info",
+      "type": "object",
+      "properties": {
+        "store_name": { "type": "string", "maxLength": 100 },
+        "logo_url": { "type": "string" },
+        "favicon_url": { "type": "string" },
+        "description": { "type": "string", "maxLength": 500 },
+        "announcement_text": { "type": "string", "maxLength": 300 },
+        "announcement_enabled": { "type": "boolean" },
+        "primary_color": { "type": "string", "maxLength": 20 },
+        "secondary_color": { "type": "string", "maxLength": 20 },
+        "bg_color": { "type": "string", "maxLength": 20 },
+        "card_bg_color": { "type": "string", "maxLength": 20 },
+        "text_color": { "type": "string", "maxLength": 20 },
+        "contact_email": { "type": "string", "maxLength": 100 },
+        "contact_phone": { "type": "string", "maxLength": 30 },
+        "footer_text": { "type": "string", "maxLength": 500 },
+        "social_links": { "type": "object" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile with role and permissions",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["super_admin", "admin", "manager", "customer"] },
+        "is_blocked": { "type": "boolean" },
+        "wishlist": { "type": "array" },
+        "createdAt": { "type": "string" },
+        "phone": { "type": "string", "maxLength": 30 }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product categories in the store",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 300 },
+        "icon_name": { "type": "string", "maxLength": 50 },
+        "is_active": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Store items available for purchase",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 150 },
+        "slug": { "type": "string", "maxLength": 150 },
+        "price": { "type": "number" },
+        "sale_price": { "type": "number" },
+        "description": { "type": "string", "maxLength": 2000 },
+        "imageUrl": { "type": "string" },
+        "images": { "type": "array" },
+        "categoryId": { "type": "string", "maxLength": 100 },
+        "category_ids": { "type": "array" },
+        "categoryName": { "type": "string", "maxLength": 100 },
+        "stockQuantity": { "type": "number" },
+        "is_active": { "type": "boolean" },
+        "featured": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "price"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Customer ratings and comments for products",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "maxLength": 100 },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["productId", "userId", "userName", "rating", "comment"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerEmail": { "type": "string", "maxLength": 150 },
+        "customerPhone": { "type": "string", "maxLength": 30 },
+        "shippingAddress": { "type": "string", "maxLength": 300 },
+        "city": { "type": "string", "maxLength": 100 },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "processing", "shipped", "delivered", "cancelled"] },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "customerName", "customerEmail", "items", "totalAmount", "status"]
+    },
+    "UserPermissions": {
+      "title": "UserPermissions",
+      "description": "Customized dashboard tab permissions for users and managers",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "branding": { "type": "boolean" },
+        "products": { "type": "boolean" },
+        "categories": { "type": "boolean" },
+        "orders": { "type": "boolean" },
+        "users": { "type": "boolean" },
+        "updatedAt": { "type": "string" },
+        "updatedBy": { "type": "string" }
+      },
+      "required": ["userId"]
+    }
+  },
+  "firestore": {
+    "/settings/{settingId}": {
+      "schema": "StoreSettings",
+      "description": "Store customization, themes, and branding settings"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Collection of user accounts and permissions"
+    },
+    "/user_permissions/{userId}": {
+      "schema": "UserPermissions",
+      "description": "Granular user permissions for dashboard tabs"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Collection of product categories"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of catalog products"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Customer reviews and star ratings"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Collection of customer orders"
+    }
+  }
+}
